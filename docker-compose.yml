@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: 
+      context: .
+      target: development
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
+      - MODE=dev
+      - PYTHONPATH=/app
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src:cached
+      - ./migrations:/app/migrations:cached
+      - ./checkpoints.db:/app/checkpoints.db
+    develop:
+      watch:
+        - path: ./src
+          target: /app/src
+          action: sync+restart
+          ignore:
+            - "**/*.pyc"
+            - "**/__pycache__"
+            - "**/*.pyo"
+            - "**/*.pyd"
+            - "**/.Python"
+            - "**/.env"
+            - "**/.git"
+            - "**/.venv"
+        - path: ./migrations
+          target: /app/migrations
+          action: sync
+          ignore:
+            - "**/*.pyc"
+            - "**/__pycache__"
+
+volumes:
+  postgres_data:
