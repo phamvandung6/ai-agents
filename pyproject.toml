@@ -1,7 +1,7 @@
 [project]
 name = "agent-service-toolkit"
 version = "0.1.0"
-description = "Full toolkit for running an AI agent service built with LangGraph, FastAPI and Streamlit"
+description = "Agent service toolkit"
 readme = "README.md"
 authors = [{ name = "Dung Pham", email = "van.phamdung2004@gmail.com" }]
 classifiers = [
@@ -47,9 +47,9 @@ dependencies = [
     "passlib>=1.7.4",
     "python-jose>=3.3.0",
     "python-multipart>=0.0.20",
-    "chromadb>=0.6.3",
     "google-cloud-aiplatform>=1.79.0",
     "python-docx>=1.1.2",
+    "langchain-qdrant>=0.2.0",
 ]
 
 [dependency-groups]

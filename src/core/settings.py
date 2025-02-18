@@ -69,7 +69,8 @@ class Settings(BaseSettings):
     DB_NAME: str
 
     # ChromaDB settings
-    DATA_DIR: str = "data"
+    QDRANT_URL: str
+    QDRANT_API_KEY: str
 
     def model_post_init(self, __context: Any) -> None:
         api_keys = {

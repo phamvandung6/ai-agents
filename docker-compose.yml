@@ -34,14 +34,12 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./src:/app/src:cached
-      - ./migrations:/app/migrations:cached
       - ./checkpoints.db:/app/checkpoints.db
     develop:
       watch:
-        - path: ./src
+        - action: sync+restart
+          path: ./src
           target: /app/src
-          action: sync+restart
           ignore:
             - "**/*.pyc"
             - "**/__pycache__"
@@ -51,9 +49,9 @@ services:
             - "**/.env"
             - "**/.git"
             - "**/.venv"
-        - path: ./migrations
+        - action: sync
+          path: ./migrations
           target: /app/migrations
-          action: sync
           ignore:
             - "**/*.pyc"
             - "**/__pycache__"

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from langgraph.graph.state import CompiledStateGraph
 
+from src.agents.admission_agent import admission_agent
 from src.agents.bg_task_agent.bg_task_agent import bg_task_agent
 from src.agents.chatbot import chatbot
 from src.agents.command_agent import command_agent
@@ -29,6 +30,10 @@ agents: dict[str, Agent] = {
     "react-agent": Agent(
         description="A ReAct framework agent with step-by-step reasoning.",
         graph=react_agent,
+    ),
+    "admission-agent": Agent(
+        description="A specialized agent for admission consulting at Faculty of Mathematics, Mechanics and Informatics.",
+        graph=admission_agent,
     ),
 }
 
